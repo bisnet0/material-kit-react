@@ -8,6 +8,7 @@ import MenuList from '@mui/material/MenuList';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
+import { fCnpj } from 'src/utils/format-cnpj';
 
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
@@ -55,7 +56,7 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
             {row.description} {/* Isso é equivalente ao 'name' no mock */}
           </Box>
         </TableCell>
-        <TableCell>{row.cnpj}</TableCell> {/* Substituindo 'company' por 'cnpj' */}
+        <TableCell>{fCnpj(row.cnpj)}</TableCell>
         <TableCell>{row.municipalRegistration}</TableCell> {/* Exibindo a inscrição municipal */}
         
 
