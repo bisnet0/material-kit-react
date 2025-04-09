@@ -7,7 +7,7 @@ import { InvoicesView } from 'src/sections/invoices/view';
 export default function Page() {
   return (
     <>
-      <title>{`Invoices - ${CONFIG.appName}`}</title>
+      <title>{`Notas Fiscais - ${CONFIG.appName}`}</title>
 
       <InvoicesView />
     </>
