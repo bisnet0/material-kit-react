@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -15,14 +14,14 @@ import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
+// Atualizando UserProps
 export type UserProps = {
-  id: string;
-  name: string;
-  role: string;
-  status: string;
-  company: string;
+  _id: string;
+  description: string;  // Antes era 'name'
+  cnpj: number;
+  municipalRegistration: number;
+  status: boolean;
   avatarUrl: string;
-  isVerified: boolean;
 };
 
 type UserTableRowProps = {
@@ -49,33 +48,19 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
           <Checkbox disableRipple checked={selected} onChange={onSelectRow} />
         </TableCell>
 
+        <TableCell>{row._id}</TableCell>
+
         <TableCell component="th" scope="row">
-          <Box
-            sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar alt={row.name} src={row.avatarUrl} />
-            {row.name}
+          <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
+            {row.description} {/* Isso é equivalente ao 'name' no mock */}
           </Box>
         </TableCell>
-
-        <TableCell>{row.company}</TableCell>
-
-        <TableCell>{row.role}</TableCell>
-
-        <TableCell align="center">
-          {row.isVerified ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-            '-'
-          )}
-        </TableCell>
+        <TableCell>{row.cnpj}</TableCell> {/* Substituindo 'company' por 'cnpj' */}
+        <TableCell>{row.municipalRegistration}</TableCell> {/* Exibindo a inscrição municipal */}
+        
 
         <TableCell>
-          <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label>
+          <Label color={row.status ? 'success' : 'error'}>{row.status ? 'Ativo' : 'Inativado'}</Label> 
         </TableCell>
 
         <TableCell align="right">
@@ -110,12 +95,12 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
         >
           <MenuItem onClick={handleClosePopover}>
             <Iconify icon="solar:pen-bold" />
-            Edit
+            Editar
           </MenuItem>
 
           <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
-            Delete
+            Excluir
           </MenuItem>
         </MenuList>
       </Popover>
