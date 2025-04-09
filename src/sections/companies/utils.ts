@@ -71,7 +71,12 @@ export function applyFilter({ inputData, comparator, filterName }: ApplyFilterPr
 
   if (filterName) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      (user) =>
+        user.description.toLowerCase().includes(filterName.toLowerCase()) ||  // Filtro pela descrição
+        user.cnpj.toString().includes(filterName.toLowerCase()) ||            // Filtro pelo CNPJ
+        user.municipalRegistration.toString().includes(filterName.toLowerCase())  || // Filtro pela Inscrição Municipal
+        (user.status === true && 'ativo'.includes(filterName.toLowerCase())) ||  // Filtro pelo Status (Ativo)
+      (user.status === false && 'inativado'.includes(filterName.toLowerCase()))  // Filtro pelo Status (Inativo)
     );
   }
 
