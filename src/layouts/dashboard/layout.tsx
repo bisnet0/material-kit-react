@@ -11,7 +11,6 @@ import { _langs, _notifications } from 'src/_mock';
 
 import { NavMobile, NavDesktop } from './nav';
 import { layoutClasses } from '../core/classes';
-import { _account } from '../nav-config-account';
 import { dashboardLayoutVars } from './css-vars';
 import { navData } from '../nav-config-dashboard';
 import { MainSection } from '../core/main-section';
@@ -73,21 +72,7 @@ export function DashboardLayout({
           <NavMobile data={navData} open={open} onClose={onClose}  />
         </>
       ),
-      rightArea: (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.75 } }}>
-          {/** @slot Searchbar */}
-          <Searchbar />
 
-          {/** @slot Language popover */}
-          <LanguagePopover data={_langs} />
-
-          {/** @slot Notifications popover */}
-          <NotificationsPopover data={_notifications} />
-
-          {/** @slot Account drawer */}
-          <AccountPopover data={_account} />
-        </Box>
-      ),
     };
 
     return (
