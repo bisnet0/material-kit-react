@@ -47,6 +47,7 @@ const ScrollbarRoot = styled(SimpleBar, {
   minWidth: 0,
   minHeight: 0,
   flexGrow: 1,
+  marginTop: 50,
   display: 'flex',
   flexDirection: 'column',
   ...(fillContent && {
