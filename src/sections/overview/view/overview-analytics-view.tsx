@@ -8,9 +8,9 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { getInvoicesDownloads } from 'src/middleware/apiMiddleware';
 import { fHour } from 'src/utils/format-time';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
-import { AnalyticsCurrentVisits } from '../analytics-current-visits';
 import { AnalyticsMyCompanies } from '../analytics-my-companies'; // corrigido o caminho
 import { AnalyticsLastDownloads } from '../analytics-last-downloads';
+import { QuickActionsCard } from '../quick-actions';
 
 // ----------------------------------------------------------------------
 
@@ -88,6 +88,9 @@ export function OverviewAnalyticsView() {
             }}
           />
         </Grid>
+        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+          <QuickActionsCard />
+        </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <AnalyticsMyCompanies />
@@ -98,6 +101,7 @@ export function OverviewAnalyticsView() {
         </Grid>
 
       </Grid>
+
     </DashboardContent>
   );
 }
