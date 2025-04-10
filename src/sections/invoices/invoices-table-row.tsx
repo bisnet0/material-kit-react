@@ -48,9 +48,9 @@ export function InvoicesTableRow({ row, selected, onSelectRow }: InvoicesTableRo
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>{row.invoiceNumber}</TableCell>
 
@@ -64,11 +64,11 @@ export function InvoicesTableRow({ row, selected, onSelectRow }: InvoicesTableRo
 
         <TableCell>{fCurrency(row.amount)}</TableCell>
 
-        <TableCell align="right">
+        {/* <TableCell align="right">
           <IconButton onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
 
       <Popover
