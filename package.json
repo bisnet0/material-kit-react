@@ -33,7 +33,7 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource-variable/dm-sans": "^5.2.5",
     "@fontsource/barlow": "^5.2.5",
-    "@iconify/react": "^5.2.1",
+    "@iconify/icons-eva": "^1.2.6",
     "@mui/lab": "^7.0.0-beta.10",
     "@mui/material": "^7.0.1",
     "apexcharts": "^4.5.0",
@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.23.0",
+    "@iconify/react": "^5.2.1",
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
