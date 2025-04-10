@@ -25,13 +25,15 @@ type Props = CardProps & {
 export function AnalyticsMyCompanies({ title = 'Minhas Empresas', subheader, sx, ...other }: Props) {
   const theme = useTheme();
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCompaniesData = async () => {
       setLoading(true);
       try {
         const data = await getCompanies(); // Chama o middleware para pegar os dados
-        setCompanies(data);
+        const latestCompanies = data.slice(-6); // Pega os 6 últimos elementos
+        setCompanies(latestCompanies);
       } catch (error) {
         console.error('Error fetching companies:', error);
       } finally {
@@ -40,6 +42,7 @@ export function AnalyticsMyCompanies({ title = 'Minhas Empresas', subheader, sx,
     };
     fetchCompaniesData();
   }, []);
+  
 
   return (
     <Card sx={sx} {...other}>
@@ -89,8 +92,5 @@ export function AnalyticsMyCompanies({ title = 'Minhas Empresas', subheader, sx,
       <Divider sx={{ borderStyle: 'dashed' }} />
     </Card>
   );
-}
-function setLoading(arg0: boolean) {
-  throw new Error('Function not implemented.');
 }
 
