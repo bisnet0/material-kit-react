@@ -46,7 +46,24 @@ export function AnalyticsLastDownloads({ title = 'Últimos Downloads', subheader
 
   return (
     <Card sx={sx} {...other}>
-      <CardHeader title={title} subheader={subheader} />
+      <CardHeader
+  title={
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box
+        sx={{
+          width: 8,
+          height: '24px', // Define a altura do retângulo
+          backgroundColor: 'warning.main',
+          borderRadius: '4px',
+          mr: 2, // Espaço entre o retângulo e o título
+        }}
+      />
+      <Typography variant="h5">{title}</Typography>
+    </Box>
+  }
+  subheader={subheader}
+/>
+
 
       <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
         {downloads.map((item) => (
@@ -65,7 +82,7 @@ export function AnalyticsLastDownloads({ title = 'Últimos Downloads', subheader
             <Box>
               <Typography variant="subtitle1">{fLongDate(item.downloadDate)}</Typography>
               <Typography variant="caption" color="text.secondary">
-                {fHour(item.downloadDate)}
+                {"Executado às " + fHour(item.downloadDate)}
               </Typography>
             </Box>
 
