@@ -38,7 +38,7 @@ export function InvoicesTableToolbar({ numSelected, filterName, onFilterName }: 
           fullWidth
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search user..."
+          placeholder="Buscar por: Empresa, Emissor [...]"
           startAdornment={
             <InputAdornment position="start">
               <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
