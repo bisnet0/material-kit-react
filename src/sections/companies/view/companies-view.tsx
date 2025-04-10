@@ -19,6 +19,7 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
 import { getCompanies } from '../../../middleware/apiMiddleware';// Importando a função do middleware
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { CompanyAddModal } from '../../../components/modal/company-add-modal';
 // ----------------------------------------------------------------------
 
 export function UserView() {
@@ -27,7 +28,20 @@ export function UserView() {
   const [filterName, setFilterName] = useState('');
   const [companies, setCompanies] = useState<UserProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+
+
+  const handleCloseModal = () => setOpenAddModal(false);
+  const handleOpenModal = () => setOpenAddModal(true);
+
+  // Atualize após adicionar:
+  const handleSuccessAdd = () => {
+    setOpenAddModal(false);
+    setRefreshTrigger(prev => prev + 1); // forçamos um refresh
+    table.onResetPage(); // reseta paginação
+  };
   // Fetch data from API via middleware
   useEffect(() => {
     const fetchCompaniesData = async () => {
@@ -42,7 +56,7 @@ export function UserView() {
       }
     };
     fetchCompaniesData();
-  }, []);
+  }, [refreshTrigger]); // Adicione refreshTrigger aqui para atualizar quando necessário
 
   const dataFiltered: UserProps[] = applyFilter({
     inputData: companies,
@@ -58,13 +72,20 @@ export function UserView() {
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
           Empresas
         </Typography>
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="mingcute:add-line" />}>
+        <Button
+          variant="contained"
+          color="inherit"
+          startIcon={<Iconify icon="mingcute:add-line" />}
+          onClick={handleOpenModal}
+        >
           Adicionar Empresa
         </Button>
         <Button variant="contained" color="inherit" startIcon={<Icon icon="mdi:import" />}>
           Importar Empresas
         </Button>
       </Box>
+
+      <CompanyAddModal open={openAddModal} onClose={handleCloseModal} onSuccess={handleSuccessAdd} />
 
       <Card>
         <UserTableToolbar
@@ -203,5 +224,6 @@ export function useTable() {
     onChangePage,
     onSelectAllRows,
     onChangeRowsPerPage,
+    
   };
 }
