@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -9,9 +9,8 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { _users } from 'src/_mock';
+import { Icon } from "@iconify/react";
 import { DashboardContent } from 'src/layouts/dashboard';
-
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
@@ -20,19 +19,38 @@ import { InvoicesTableHead } from '../invoices-table-head';
 import { TableEmptyRows } from '../invoices-table-empty-rows';
 import { InvoicesTableNoData } from '../invoices-table-no-data';
 import { InvoicesTableToolbar } from '../invoices-table-toolbar';
+
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { getInvoices } from '../../../middleware/apiMiddleware';
 
+import { useTable } from '../../companies/view/companies-view';
 import type { InvoicesProps } from '../invoices-table-row';
-
-// ----------------------------------------------------------------------
 
 export function InvoicesView() {
   const table = useTable();
 
   const [filterName, setFilterName] = useState('');
+  const [invoices, setInvoices] = useState<InvoicesProps[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      setLoading(true);
+      try {
+        const data = await getInvoices();
+        setInvoices(data);
+      } catch (err) {
+        console.error('Erro ao buscar faturas:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvoices();
+  }, []);
 
   const dataFiltered: InvoicesProps[] = applyFilter({
-    inputData: _users,
+    inputData: invoices,
     comparator: getComparator(table.order, table.orderBy),
     filterName,
   });
@@ -41,20 +59,14 @@ export function InvoicesView() {
 
   return (
     <DashboardContent>
-      <Box
-        sx={{
-          mb: 5,
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={{ mb: 5, display: 'flex', alignItems: 'center' }}>
         <Typography variant="h4" sx={{ flexGrow: 1 }}>
           Notas Fiscais
         </Typography>
         <Button
           variant="contained"
           color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
+          startIcon={<Icon icon="mdi:download" />}
         >
           Baixar Notas Filtradas
         </Button>
@@ -76,42 +88,44 @@ export function InvoicesView() {
               <InvoicesTableHead
                 order={table.order}
                 orderBy={table.orderBy}
-                rowCount={_users.length}
+                rowCount={invoices.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
                 onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    _users.map((user) => user.id)
-                  )
+                  table.onSelectAllRows(checked, invoices.map((inv) => inv._id))
                 }
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'invoiceNumber', label: 'Número' },
+                  { id: 'companyId.description', label: 'Empresa' },
+                  { id: 'senderDate', label: 'Data de Emissão' },
+                  { id: 'sender', label: 'Emissor' },
+                  { id: 'taker', label: 'Tomador' },
+                  { id: 'amount', label: 'Valor' },
                   { id: '' },
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <InvoicesTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                    />
-                  ))}
+                {loading ? (
+                  <InvoicesTableNoData searchQuery="Carregando..." />
+                ) : (
+                  dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row) => (
+                      <InvoicesTableRow
+                        key={row._id}
+                        row={row}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                      />
+                    ))
+                )}
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, invoices.length)}
                 />
 
                 {notFound && <InvoicesTableNoData searchQuery={filterName} />}
@@ -123,7 +137,7 @@ export function InvoicesView() {
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={invoices.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}
@@ -132,72 +146,4 @@ export function InvoicesView() {
       </Card>
     </DashboardContent>
   );
-}
-
-// ----------------------------------------------------------------------
-
-export function useTable() {
-  const [page, setPage] = useState(0);
-  const [orderBy, setOrderBy] = useState('name');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-
-  const onSort = useCallback(
-    (id: string) => {
-      const isAsc = orderBy === id && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(id);
-    },
-    [order, orderBy]
-  );
-
-  const onSelectAllRows = useCallback((checked: boolean, newSelecteds: string[]) => {
-    if (checked) {
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  }, []);
-
-  const onSelectRow = useCallback(
-    (inputValue: string) => {
-      const newSelected = selected.includes(inputValue)
-        ? selected.filter((value) => value !== inputValue)
-        : [...selected, inputValue];
-
-      setSelected(newSelected);
-    },
-    [selected]
-  );
-
-  const onResetPage = useCallback(() => {
-    setPage(0);
-  }, []);
-
-  const onChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  const onChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      onResetPage();
-    },
-    [onResetPage]
-  );
-
-  return {
-    page,
-    order,
-    onSort,
-    orderBy,
-    selected,
-    rowsPerPage,
-    onSelectRow,
-    onResetPage,
-    onChangePage,
-    onSelectAllRows,
-    onChangeRowsPerPage,
-  };
 }
