@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
-
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -8,27 +7,21 @@ import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-
 import { Icon } from "@iconify/react";
 import { DashboardContent } from 'src/layouts/dashboard';
-import { Iconify } from 'src/components/iconify';
-import { Scrollbar } from 'src/components/scrollbar';
-
 import { InvoicesTableRow } from '../invoices-table-row';
 import { InvoicesTableHead } from '../invoices-table-head';
 import { TableEmptyRows } from '../invoices-table-empty-rows';
 import { InvoicesTableNoData } from '../invoices-table-no-data';
 import { InvoicesTableToolbar } from '../invoices-table-toolbar';
-
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import { getInvoices } from '../../../middleware/apiMiddleware';
-
 import { useTable } from '../../companies/view/companies-view';
 import type { InvoicesProps } from '../invoices-table-row';
+import * as XLSX from 'xlsx'; // Importando a biblioteca XLSX
 
 export function InvoicesView() {
   const table = useTable();
-
   const [filterName, setFilterName] = useState('');
   const [invoices, setInvoices] = useState<InvoicesProps[]>([]);
   const [loading, setLoading] = useState(false);
@@ -57,6 +50,27 @@ export function InvoicesView() {
 
   const notFound = !dataFiltered.length && !!filterName;
 
+  // Função para baixar as notas filtradas como um arquivo Excel
+  const handleDownload = () => {
+    // Converte as notas filtradas para o formato de planilha
+    const formattedData = dataFiltered.map((invoice) => ({
+      'Número': invoice.invoiceNumber,
+      'Empresa': invoice.companyId.description,
+      'Data de Emissão': invoice.senderDate,
+      'Emissor': invoice.sender,
+      'Tomador': invoice.taker,
+      'Valor': invoice.amount,
+    }));
+
+    // Cria uma planilha com os dados
+    const ws = XLSX.utils.json_to_sheet(formattedData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Notas Fiscais');
+
+    // Baixa o arquivo Excel
+    XLSX.writeFile(wb, 'Notas_Fiscais.xlsx');
+  };
+
   return (
     <DashboardContent>
       <Box sx={{ mb: 5, display: 'flex', alignItems: 'center' }}>
@@ -67,6 +81,7 @@ export function InvoicesView() {
           variant="contained"
           color="inherit"
           startIcon={<Icon icon="mdi:download" />}
+          onClick={handleDownload} // Adicionando evento para download
         >
           Baixar Notas Filtradas
         </Button>
@@ -82,57 +97,55 @@ export function InvoicesView() {
           }}
         />
 
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
-              <InvoicesTableHead
-                order={table.order}
-                orderBy={table.orderBy}
-                rowCount={invoices.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(checked, invoices.map((inv) => inv._id))
-                }
-                headLabel={[
-                  { id: 'invoiceNumber', label: 'Número' },
-                  { id: 'companyId.description', label: 'Empresa' },
-                  { id: 'senderDate', label: 'Data de Emissão' },
-                  { id: 'sender', label: 'Emissor' },
-                  { id: 'taker', label: 'Tomador' },
-                  { id: 'amount', label: 'Valor' },
-                  { id: '' },
-                ]}
+        <TableContainer sx={{ overflow: 'unset' }}>
+          <Table sx={{ minWidth: 800 }}>
+            <InvoicesTableHead
+              order={table.order}
+              orderBy={table.orderBy}
+              rowCount={invoices.length}
+              numSelected={table.selected.length}
+              onSort={table.onSort}
+              onSelectAllRows={(checked) =>
+                table.onSelectAllRows(checked, invoices.map((inv) => inv._id))
+              }
+              headLabel={[
+                { id: 'invoiceNumber', label: 'Número' },
+                { id: 'companyId.description', label: 'Empresa' },
+                { id: 'senderDate', label: 'Data de Emissão' },
+                { id: 'sender', label: 'Emissor' },
+                { id: 'taker', label: 'Tomador' },
+                { id: 'amount', label: 'Valor' },
+                { id: '' },
+              ]}
+            />
+            <TableBody>
+              {loading ? (
+                <InvoicesTableNoData searchQuery="Carregando..." />
+              ) : (
+                dataFiltered
+                  .slice(
+                    table.page * table.rowsPerPage,
+                    table.page * table.rowsPerPage + table.rowsPerPage
+                  )
+                  .map((row) => (
+                    <InvoicesTableRow
+                      key={row._id}
+                      row={row}
+                      selected={table.selected.includes(row._id)}
+                      onSelectRow={() => table.onSelectRow(row._id)}
+                    />
+                  ))
+              )}
+
+              <TableEmptyRows
+                height={68}
+                emptyRows={emptyRows(table.page, table.rowsPerPage, invoices.length)}
               />
-              <TableBody>
-                {loading ? (
-                  <InvoicesTableNoData searchQuery="Carregando..." />
-                ) : (
-                  dataFiltered
-                    .slice(
-                      table.page * table.rowsPerPage,
-                      table.page * table.rowsPerPage + table.rowsPerPage
-                    )
-                    .map((row) => (
-                      <InvoicesTableRow
-                        key={row._id}
-                        row={row}
-                        selected={table.selected.includes(row._id)}
-                        onSelectRow={() => table.onSelectRow(row._id)}
-                      />
-                    ))
-                )}
 
-                <TableEmptyRows
-                  height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, invoices.length)}
-                />
-
-                {notFound && <InvoicesTableNoData searchQuery={filterName} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+              {notFound && <InvoicesTableNoData searchQuery={filterName} />}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         <TablePagination
           component="div"
