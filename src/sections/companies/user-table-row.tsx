@@ -9,16 +9,15 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 import { fCnpj } from 'src/utils/format-cnpj';
-
+import { CompanyEditModal } from 'src/components/modal/company-edit-modal';
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-// Atualizando UserProps
 export type UserProps = {
   _id: string;
-  description: string;  // Antes era 'name'
+  description: string;
   cnpj: number;
   municipalRegistration: number;
   status: boolean;
@@ -29,10 +28,12 @@ type UserTableRowProps = {
   row: UserProps;
   selected: boolean;
   onSelectRow: () => void;
+  onUpdated: () => void; // <<< adicionando prop para acionar atualização no pai
 };
 
-export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) {
+export function UserTableRow({ row, selected, onSelectRow, onUpdated }: UserTableRowProps) {
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setOpenPopover(event.currentTarget);
@@ -41,6 +42,15 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
   const handleClosePopover = useCallback(() => {
     setOpenPopover(null);
   }, []);
+
+  const handleOpenEditModal = () => {
+    setOpenEditModal(true);
+    handleClosePopover(); // fecha o popover ao abrir o modal
+  };
+
+  const handleCloseEditModal = () => {
+    setOpenEditModal(false);
+  };
 
   return (
     <>
@@ -53,15 +63,17 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
 
         <TableCell component="th" scope="row">
           <Box sx={{ gap: 2, display: 'flex', alignItems: 'center' }}>
-            {row.description} {/* Isso é equivalente ao 'name' no mock */}
+            {row.description}
           </Box>
         </TableCell>
+
         <TableCell>{fCnpj(row.cnpj)}</TableCell>
-        <TableCell>{row.municipalRegistration}</TableCell> {/* Exibindo a inscrição municipal */}
-        
+        <TableCell>{row.municipalRegistration}</TableCell>
 
         <TableCell>
-          <Label color={row.status ? 'success' : 'error'}>{row.status ? 'Ativo' : 'Inativado'}</Label> 
+          <Label color={row.status ? 'success' : 'error'}>
+            {row.status ? 'Ativo' : 'Inativado'}
+          </Label>
         </TableCell>
 
         <TableCell align="right">
@@ -94,7 +106,7 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
             },
           }}
         >
-          <MenuItem onClick={handleClosePopover}>
+          <MenuItem onClick={handleOpenEditModal}>
             <Iconify icon="solar:pen-bold" />
             Editar
           </MenuItem>
@@ -105,6 +117,17 @@ export function UserTableRow({ row, selected, onSelectRow }: UserTableRowProps) 
           </MenuItem>
         </MenuList>
       </Popover>
+
+      {/* MODAL DE EDIÇÃO */}
+      <CompanyEditModal
+        open={openEditModal}
+        onClose={handleCloseEditModal}
+        onSuccess={() => {
+          handleCloseEditModal();
+          onUpdated(); // <<< dispara o update no componente pai
+        }}
+        company={row}
+      />
     </>
   );
 }
