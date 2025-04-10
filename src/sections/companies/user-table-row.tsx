@@ -80,9 +80,9 @@ export function UserTableRow({ row, selected, onSelectRow, onUpdated }: UserTabl
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>{row._id}</TableCell>
 
