@@ -32,3 +32,13 @@ export const getInvoices = async () => {
     throw error;
   }
 }
+
+export const getInvoicesDownloads = async () => {
+  try {
+    const response = await api.get('/invoices-download');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching invoices downloads:', error);
+    throw error;
+  }
+};
