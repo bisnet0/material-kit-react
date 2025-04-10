@@ -4,48 +4,30 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-// ----------------------------------------------------------------------
-
-/**
- * @Docs
- * https://day.js.org/docs/en/display/format
- */
-
-/**
- * Default timezones
- * https://day.js.org/docs/en/timezone/set-default-timezone#docsNav
- *
- */
-
-/**
- * UTC
- * https://day.js.org/docs/en/plugin/utc
- * @install
- * import utc from 'dayjs/plugin/utc';
- * dayjs.extend(utc);
- * @usage
- * dayjs().utc().format()
- *
- */
+// ✔️ Adicionando locale pt-br
+import 'dayjs/locale/pt-br';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
+
+// ✔️ Define o locale padrão como pt-br
+dayjs.locale('pt-br');
 
 // ----------------------------------------------------------------------
 
 export type DatePickerFormat = Dayjs | Date | string | number | null | undefined;
 
 export const formatPatterns = {
-  dateTime: 'DD MMM YYYY h:mm a', // 17 Apr 2022 12:00 am
-  date: 'DD MMM YYYY', // 17 Apr 2022
-  time: 'h:mm a', // 12:00 am
+  dateTime: 'DD/MM/YYYY HH:mm:ss', // 🆕 Padrão BR 24h
+  date: 'DD/MM/YYYY',
+  time: 'HH:mm:ss',
   split: {
-    dateTime: 'DD/MM/YYYY h:mm a', // 17/04/2022 12:00 am
-    date: 'DD/MM/YYYY', // 17/04/2022
+    dateTime: 'DD/MM/YYYY HH:mm:ss',
+    date: 'DD/MM/YYYY',
   },
   paramCase: {
-    dateTime: 'DD-MM-YYYY h:mm a', // 17-04-2022 12:00 am
-    date: 'DD-MM-YYYY', // 17-04-2022
+    dateTime: 'DD-MM-YYYY HH:mm:ss',
+    date: 'DD-MM-YYYY',
   },
 };
 
@@ -54,12 +36,9 @@ const isValidDate = (date: DatePickerFormat) =>
 
 // ----------------------------------------------------------------------
 
-/**
- * @output 17 Apr 2022 12:00 am
- */
 export function fDateTime(date: DatePickerFormat, template?: string): string {
   if (!isValidDate(date)) {
-    return 'Invalid date';
+    return 'Data inválida';
   }
 
   return dayjs(date).format(template ?? formatPatterns.dateTime);
@@ -67,12 +46,9 @@ export function fDateTime(date: DatePickerFormat, template?: string): string {
 
 // ----------------------------------------------------------------------
 
-/**
- * @output 17 Apr 2022
- */
 export function fDate(date: DatePickerFormat, template?: string): string {
   if (!isValidDate(date)) {
-    return 'Invalid date';
+    return 'Data inválida';
   }
 
   return dayjs(date).format(template ?? formatPatterns.date);
@@ -80,12 +56,9 @@ export function fDate(date: DatePickerFormat, template?: string): string {
 
 // ----------------------------------------------------------------------
 
-/**
- * @output a few seconds, 2 years
- */
 export function fToNow(date: DatePickerFormat): string {
   if (!isValidDate(date)) {
-    return 'Invalid date';
+    return 'Data inválida';
   }
 
   return dayjs(date).toNow(true);
