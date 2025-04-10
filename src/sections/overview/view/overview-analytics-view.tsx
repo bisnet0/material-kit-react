@@ -88,19 +88,21 @@ export function OverviewAnalyticsView() {
             }}
           />
         </Grid>
-        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 3 } }>
           <QuickActionsCard />
         </Grid>
+      </Grid>
+      <Grid container spacing={3} alignContent={'center'} justifyContent="space-between">
 
-        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 6 }}>
           <AnalyticsMyCompanies />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
-            <AnalyticsLastDownloads />
+        <Grid size={{ xs: 12, md: 6, lg: 6 }}>
+          <AnalyticsLastDownloads />
         </Grid>
-
       </Grid>
+
 
     </DashboardContent>
   );
