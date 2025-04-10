@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
 import { fCurrency } from 'src/utils/format-number';
-import { fDate, fDateTime } from 'src/utils/format-time'; // certifique-se de ter uma função de formatação de data
+import { fDateTime } from 'src/utils/format-time'; // certifique-se de ter uma função de formatação de data
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
