@@ -8,9 +8,8 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
 
-import { fNumber, fPercent, fShortenNumber } from 'src/utils/format-number';
+import { fNumber, fShortenNumber } from 'src/utils/format-number';
 
-import { Iconify } from 'src/components/iconify';
 import { SvgColor } from 'src/components/svg-color';
 import { Chart, useChart } from 'src/components/chart';
 
@@ -18,8 +17,7 @@ import { Chart, useChart } from 'src/components/chart';
 
 type Props = CardProps & {
   title: string;
-  total: number;
-  percent: number;
+  total: number | string;
   color?: PaletteColorKey;
   icon: React.ReactNode;
   chart: {
@@ -35,7 +33,6 @@ export function AnalyticsWidgetSummary({
   title,
   total,
   chart,
-  percent,
   color = 'primary',
   ...other
 }: Props) {
@@ -56,32 +53,16 @@ export function AnalyticsWidgetSummary({
       },
     },
     tooltip: {
-      y: { formatter: (value: number) => fNumber(value), title: { formatter: () => '' } },
+      y: {
+        formatter: (value: number) => fNumber(value),
+        title: { formatter: () => '' },
+      },
     },
     markers: {
       strokeWidth: 0,
     },
     ...chart.options,
   });
-
-  const renderTrending = () => (
-    <Box
-      sx={{
-        top: 16,
-        gap: 0.5,
-        right: 16,
-        display: 'flex',
-        position: 'absolute',
-        alignItems: 'center',
-      }}
-    >
-      <Iconify width={20} icon={percent < 0 ? 'eva:trending-down-fill' : 'eva:trending-up-fill'} />
-      <Box component="span" sx={{ typography: 'subtitle2' }}>
-        {percent > 0 && '+'}
-        {fPercent(percent)}
-      </Box>
-    </Box>
-  );
 
   return (
     <Card
@@ -100,8 +81,6 @@ export function AnalyticsWidgetSummary({
     >
       <Box sx={{ width: 48, height: 48, mb: 3 }}>{icon}</Box>
 
-      {renderTrending()}
-
       <Box
         sx={{
           display: 'flex',
@@ -113,7 +92,9 @@ export function AnalyticsWidgetSummary({
         <Box sx={{ flexGrow: 1, minWidth: 112 }}>
           <Box sx={{ mb: 1, typography: 'subtitle2' }}>{title}</Box>
 
-          <Box sx={{ typography: 'h4' }}>{fShortenNumber(total)}</Box>
+          <Box sx={{ typography: 'h4' }}>
+            {typeof total === 'number' ? fShortenNumber(total) : total}
+          </Box>
         </Box>
 
         <Chart
