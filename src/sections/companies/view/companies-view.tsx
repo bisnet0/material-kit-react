@@ -18,6 +18,7 @@ import { UserTableToolbar } from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 import type { UserProps } from '../user-table-row';
 import { getCompanies } from '../../../middleware/apiMiddleware';// Importando a função do middleware
+import { Icon } from '@iconify/react/dist/iconify.js';
 // ----------------------------------------------------------------------
 
 export function UserView() {
@@ -60,7 +61,7 @@ export function UserView() {
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="mingcute:add-line" />}>
           Adicionar Empresa
         </Button>
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="custom:menu-duotone" />}>
+        <Button variant="contained" color="inherit" startIcon={<Icon icon="mdi:import" />}>
           Importar Empresas
         </Button>
       </Box>
