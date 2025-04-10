@@ -1,6 +1,6 @@
 import { Box, Card, CardHeader, Divider, Typography, Link, IconButton } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { Dashboard as DashboardIcon, FileDownload as FileDownloadIcon, Receipt as ReceiptIcon, Business as BusinessIcon } from '@mui/icons-material';
+import { FileDownload as FileDownloadIcon, Receipt as ReceiptIcon, Business as BusinessIcon } from '@mui/icons-material';
 
 // Componente de Ações Rápidas dentro de um Card
 export function QuickActionsCard({ title = 'Ações Rápidas', subheader }: { title?: string, subheader?: string }) {
@@ -37,7 +37,7 @@ export function QuickActionsCard({ title = 'Ações Rápidas', subheader }: { ti
             gap: 1,
           }}
         >
-          <FileDownloadIcon sx={{ color: 'primary.main' }}  />
+          <FileDownloadIcon sx={{ color: 'primary.main' }} /> {/* Ícone com cor primária */}
           <Typography variant="body2">Baixar as Notas de Ontem</Typography>
         </Link>
 
@@ -53,7 +53,7 @@ export function QuickActionsCard({ title = 'Ações Rápidas', subheader }: { ti
             gap: 1,
           }}
         >
-          <ReceiptIcon sx={{ color: 'primary.main' }} />
+          <ReceiptIcon sx={{ color: 'primary.main' }} /> {/* Ícone com cor primária */}
           <Typography variant="body2">Ver Notas Fiscais Baixadas</Typography>
         </Link>
 
@@ -69,7 +69,7 @@ export function QuickActionsCard({ title = 'Ações Rápidas', subheader }: { ti
             gap: 1,
           }}
         >
-          <BusinessIcon sx={{ color: 'primary.main' }} />
+          <BusinessIcon sx={{ color: 'primary.main' }} /> {/* Ícone com cor primária */}
           <Typography variant="body2">Cadastrar uma Empresa</Typography>
         </Link>
       </Box>
