@@ -29,9 +29,12 @@ export function UserView() {
   const [companies, setCompanies] = useState<UserProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  const [updateTrigger, setUpdateTrigger] = useState(0);
 
+  const handleUpdateSuccess = () => {
+    setUpdateTrigger(prev => prev + 1); // muda o estado para disparar useEffect
+  };
 
   const handleCloseModal = () => setOpenAddModal(false);
   const handleOpenModal = () => setOpenAddModal(true);
@@ -39,9 +42,10 @@ export function UserView() {
   // Atualize após adicionar:
   const handleSuccessAdd = () => {
     setOpenAddModal(false);
-    setRefreshTrigger(prev => prev + 1); // forçamos um refresh
-    table.onResetPage(); // reseta paginação
+    setUpdateTrigger(prev => prev + 1); // ✅ só esse aqui agora
+    table.onResetPage(); // continua importante pra zerar a página
   };
+  
   // Fetch data from API via middleware
   useEffect(() => {
     const fetchCompaniesData = async () => {
@@ -56,7 +60,7 @@ export function UserView() {
       }
     };
     fetchCompaniesData();
-  }, [refreshTrigger]); // Adicione refreshTrigger aqui para atualizar quando necessário
+  }, [updateTrigger]); 
 
   const dataFiltered: UserProps[] = applyFilter({
     inputData: companies,
@@ -130,6 +134,7 @@ export function UserView() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
+                        onUpdated={handleUpdateSuccess} // <<< aqui!
                       />
                     ))
                 )}
@@ -224,6 +229,6 @@ export function useTable() {
     onChangePage,
     onSelectAllRows,
     onChangeRowsPerPage,
-    
+
   };
 }
