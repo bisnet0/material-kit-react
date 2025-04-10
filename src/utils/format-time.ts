@@ -21,6 +21,8 @@ export const formatPatterns = {
   dateTime: 'DD/MM/YYYY HH:mm:ss', // 🆕 Padrão BR 24h
   date: 'DD/MM/YYYY',
   time: 'HH:mm:ss',
+  hour: 'HH:mm', // 🆕 Apenas hora no formato 24h
+
   split: {
     dateTime: 'DD/MM/YYYY HH:mm:ss',
     date: 'DD/MM/YYYY',
@@ -52,6 +54,16 @@ export function fDate(date: DatePickerFormat, template?: string): string {
   }
 
   return dayjs(date).format(template ?? formatPatterns.date);
+}
+
+// ----------------------------------------------------------------------
+
+export function fHour(date: DatePickerFormat, template?: string): string {
+  if (!isValidDate(date)) {
+    return 'Data inválida';
+  }
+
+  return dayjs(date).format(template ?? formatPatterns.hour);
 }
 
 // ----------------------------------------------------------------------
