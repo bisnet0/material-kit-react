@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
@@ -10,19 +9,23 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import MenuItem, { menuItemClasses } from '@mui/material/MenuItem';
 
-import { Label } from 'src/components/label';
+import { fCurrency } from 'src/utils/format-number';
+import { fDate, fDateTime } from 'src/utils/format-time'; // certifique-se de ter uma função de formatação de data
 import { Iconify } from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
 export type InvoicesProps = {
-  id: string;
-  name: string;
-  role: string;
-  status: string;
-  company: string;
-  avatarUrl: string;
-  isVerified: boolean;
+  _id: string;
+  invoiceNumber: number;
+  companyId: {
+    _id: string;
+    description: string;
+  };
+  senderDate: string;
+  sender: string;
+  taker: string;
+  amount: number;
 };
 
 type InvoicesTableRowProps = {
@@ -49,34 +52,17 @@ export function InvoicesTableRow({ row, selected, onSelectRow }: InvoicesTableRo
           <Checkbox disableRipple checked={selected} onChange={onSelectRow} />
         </TableCell>
 
-        <TableCell component="th" scope="row">
-          <Box
-            sx={{
-              gap: 2,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar alt={row.name} src={row.avatarUrl} />
-            {row.name}
-          </Box>
-        </TableCell>
+        <TableCell>{row.invoiceNumber}</TableCell>
 
-        <TableCell>{row.company}</TableCell>
+        <TableCell>{row.companyId.description}</TableCell>
 
-        <TableCell>{row.role}</TableCell>
+        <TableCell>{fDateTime(row.senderDate)}</TableCell>
 
-        <TableCell align="center">
-          {row.isVerified ? (
-            <Iconify width={22} icon="solar:check-circle-bold" sx={{ color: 'success.main' }} />
-          ) : (
-            '-'
-          )}
-        </TableCell>
+        <TableCell>{row.sender}</TableCell>
 
-        <TableCell>
-          <Label color={(row.status === 'banned' && 'error') || 'success'}>{row.status}</Label>
-        </TableCell>
+        <TableCell>{row.taker}</TableCell>
+
+        <TableCell>{fCurrency(row.amount)}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenPopover}>
@@ -110,12 +96,12 @@ export function InvoicesTableRow({ row, selected, onSelectRow }: InvoicesTableRo
         >
           <MenuItem onClick={handleClosePopover}>
             <Iconify icon="solar:pen-bold" />
-            Edit
+            Editar
           </MenuItem>
 
           <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
             <Iconify icon="solar:trash-bin-trash-bold" />
-            Delete
+            Excluir
           </MenuItem>
         </MenuList>
       </Popover>
