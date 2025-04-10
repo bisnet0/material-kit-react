@@ -23,6 +23,21 @@ export const getCompanies = async () => {
   }
 };
 
+export const createCompany = async (companyData: {
+  description: string;
+  cnpj: string | number;
+  municipalRegistration: string | number;
+  status: boolean;
+}) => {
+  try {
+    const response = await api.post('/companies', companyData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating company:', error);
+    throw error;
+  }
+};
+
 export const getInvoices = async () => {
   try {
     const response = await api.get('/invoices');
@@ -31,7 +46,7 @@ export const getInvoices = async () => {
     console.error('Error fetching invoices:', error);
     throw error;
   }
-}
+};
 
 export const getInvoicesDownloads = async () => {
   try {
