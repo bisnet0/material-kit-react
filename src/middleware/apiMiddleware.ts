@@ -38,6 +38,17 @@ export const createCompany = async (companyData: {
   }
 };
 
+export const updateCompany = async (id: string, companyData: any) => {
+  try {
+    const response = await api.put(`/companies/${id}`, companyData);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao atualizar empresa:', error);
+    throw error;
+  }
+};
+
+
 export const getInvoices = async () => {
   try {
     const response = await api.get('/invoices');
