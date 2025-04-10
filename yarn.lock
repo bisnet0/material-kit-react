@@ -307,6 +307,13 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/retry/-/retry-0.4.2.tgz"
   integrity sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==
 
+"@iconify/icons-eva@^1.2.6":
+  version "1.2.6"
+  resolved "https://registry.npmjs.org/@iconify/icons-eva/-/icons-eva-1.2.6.tgz"
+  integrity sha512-Qo5GWzKNj7QDLh2IHlzfF4s1VjX2ZcA4ZtDHjD234f3Gn8u42OSRYM7w/gUab+NjgY7ViU0Hz5IPkVpz+HCGaQ==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify/react@^5.2.1":
   version "5.2.1"
   resolved "https://registry.npmjs.org/@iconify/react/-/react-5.2.1.tgz"
@@ -314,7 +321,7 @@
   dependencies:
     "@iconify/types" "^2.0.0"
 
-"@iconify/types@^2.0.0":
+"@iconify/types@*", "@iconify/types@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@iconify/types/-/types-2.0.0.tgz"
   integrity sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==
