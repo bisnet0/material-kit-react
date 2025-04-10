@@ -9,8 +9,8 @@ import { getInvoicesDownloads } from 'src/middleware/apiMiddleware';
 import { fHour } from 'src/utils/format-time';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
-import { typography } from 'src/theme';
 import { AnalyticsMyCompanies } from '../analytics-my-companies'; // corrigido o caminho
+import { AnalyticsLastDownloads } from '../analytics-last-downloads';
 
 // ----------------------------------------------------------------------
 
@@ -93,19 +93,10 @@ export function OverviewAnalyticsView() {
           <AnalyticsMyCompanies />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-          <AnalyticsCurrentVisits
-            title="Current visits"
-            chart={{
-              series: [
-                { label: 'America', value: 3500 },
-                { label: 'Asia', value: 2500 },
-                { label: 'Europe', value: 1500 },
-                { label: 'Africa', value: 500 },
-              ],
-            }}
-          />
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+            <AnalyticsLastDownloads />
         </Grid>
+
       </Grid>
     </DashboardContent>
   );
