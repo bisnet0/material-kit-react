@@ -10,6 +10,7 @@ import { fHour } from 'src/utils/format-time';
 import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
 import { typography } from 'src/theme';
+import { AnalyticsMyCompanies } from '../analytics-my-companies'; // corrigido o caminho
 
 // ----------------------------------------------------------------------
 
@@ -63,9 +64,9 @@ export function OverviewAnalyticsView() {
             color="secondary"
             icon={
               <img
-          alt="Média de Downloads"
-          src="/assets/icons/glass/ic-glass-down.svg"
-          style={{ width: 40, height: 40 }} // Alterando o tamanho do ícone
+                alt="Média de Downloads"
+                src="/assets/icons/glass/ic-glass-down.svg"
+                style={{ width: 40, height: 40 }} // Alterando o tamanho do ícone
               />
             }
             chart={{
@@ -78,7 +79,7 @@ export function OverviewAnalyticsView() {
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
             title="Último Download Automático"
-            total={ "Hoje às "+ lastDownloadDate}
+            total={"Hoje às " + lastDownloadDate}
             color="warning"
             icon={<img alt="Último download Automático" src="/assets/icons/glass/ic-glass-watch.svg" style={{ width: 40, height: 40 }} />}
             chart={{
@@ -88,18 +89,8 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-          <AnalyticsCurrentVisits
-            title="Current visits"
-            chart={{
-              series: [
-                { label: 'America', value: 3500 },
-                { label: 'Asia', value: 2500 },
-                { label: 'Europe', value: 1500 },
-                { label: 'Africa', value: 500 },
-              ],
-            }}
-          />
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+          <AnalyticsMyCompanies />
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 6 }}>
