@@ -46,7 +46,24 @@ export function AnalyticsMyCompanies({ title = 'Minhas Empresas', subheader, sx,
 
   return (
     <Card sx={sx} {...other}>
-      <CardHeader title={title} subheader={subheader} />
+<CardHeader
+  title={
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box
+        sx={{
+          width: 8,
+          height: '24px', // Define a altura do retângulo
+          backgroundColor: 'success.main',
+          borderRadius: '4px',
+          mr: 2, // Espaço entre o retângulo e o título
+        }}
+      />
+      <Typography variant="h5">{title}</Typography>
+    </Box>
+  }
+  subheader={subheader}
+/>
+
 
       <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
         {companies.map((company) => (
