@@ -48,6 +48,17 @@ export const updateCompany = async (id: string, companyData: any) => {
   }
 };
 
+// Função para excluir uma empresa
+export const deleteCompany = async (id: string) => {
+  try {
+    const response = await api.delete(`/companies/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting company:', error);
+    throw error;
+  }
+};
+
 
 export const getInvoices = async () => {
   try {
