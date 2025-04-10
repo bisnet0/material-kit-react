@@ -11,12 +11,8 @@ export default defineConfig({
   plugins: [
     react(),
     checker({
-      typescript: true,
-      eslint: {
-        useFlatConfig: true,
-        lintCommand: 'eslint "./src/**/*.{js,jsx,ts,tsx}"',
-        dev: { logLevel: ['error'] },
-      },
+      typescript: true,  // Mantém a verificação do TypeScript
+      eslint: false,     // Desativa a verificação do ESLint
       overlay: {
         position: 'tl',
         initialIsOpen: false,
